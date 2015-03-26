@@ -1,32 +1,18 @@
 import sqlite3
+import json
 
 
 class Connector:
 
     connection = None
     required_fields = None
+    fields_to_fetch = 'config/fields.json'
 
     def __init__(self, db_name):
         self.connection = sqlite3.connect(db_name)
-        self.required_fields = {
-            'Accounts': ['id', 'skypename', 'fullname', 'languages', 'country', 'city', 'emails', 'mood_text'],
-            'Alerts': ['id', 'is_permanent', 'timestamp', 'is_unseen', 'partner_id', 'message_header_caption',
-                       'message_content', 'message_footer'],
-            'Calls': ['id', 'host_identity', 'duration', 'soundlevel', 'is_incoming', 'current_video_audience'],
-            'CallMembers': ['id', 'identity', 'dispname'],
-            'ContactGroups': ['id', 'type'],
-            'Contacts': ['id', 'skypename', 'fullname', 'country', 'city', 'phone_mobile', 'mood_text',
-                         'popularity_ord', 'pop_score'],
-            'Chats': ['id', 'friendlyname', 'timestamp', 'conv_dbid'],
-            'Conversations': ['id', 'type', 'displayname', 'last_activity_timestamp'],
-            'Messages': ['id', 'convo_id', 'from_dispname', 'timestamp', 'body_xml'],
-            'Participants': ['id', 'convo_id', 'identity', 'rank'],
-            'SMSes': ['id'],
-            'Transfers': ['id', 'type', 'partner_dispname', 'status', 'starttime', 'finishtime', 'filename'],
-            'VideoMessages': ['id'],
-            'Videos': ['id'],
-            'Voicemails': ['id']
-        }
+
+        with open(self.fields_to_fetch) as json_data:
+            self.required_fields = json.load(json_data)
 
     def disconnect(self):
         self.connection.close()
