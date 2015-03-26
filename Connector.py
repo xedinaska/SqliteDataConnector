@@ -58,6 +58,4 @@ class Connector:
 
         cur.execute('SELECT ' + select_string + ' FROM main.' + table_name + ' ')
 
-        results = cur.fetchall()
-
-        return {'data': results, 'results_count': results.__len__()}
+        return cur.fetchall()
