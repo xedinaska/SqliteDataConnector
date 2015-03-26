@@ -41,8 +41,6 @@ class Connector:
 
         for table_field in cur.fetchall():
             if table_name in self.required_fields:
-                if table_name == 'Chats':
-                    print(table_field[1])
                 if table_field[1] in self.required_fields.get(table_name):
                     table_fields.append(table_field[1])
             else:
@@ -58,6 +56,8 @@ class Connector:
             fields = self.required_fields.get(table_name)
             select_string = ",".join(fields)
 
-        cur.execute('SELECT ' + select_string + ' FROM main.' + table_name + ' LIMIT 100')
+        cur.execute('SELECT ' + select_string + ' FROM main.' + table_name + ' ')
 
-        return cur.fetchall()
+        results = cur.fetchall()
+
+        return {'data': results, 'results_count': results.__len__()}
